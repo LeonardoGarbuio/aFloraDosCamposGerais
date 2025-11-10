@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary Colors */
+  --color-primary: #2D5A3D; /* deep forest green */
+  --color-primary-50: #F0F4F1; /* lightest forest green */
+  --color-primary-100: #D4E2D8; /* very light forest green */
+  --color-primary-200: #A9C5B0; /* light forest green */
+  --color-primary-300: #7EA888; /* medium-light forest green */
+  --color-primary-400: #538B60; /* medium forest green */
+  --color-primary-500: #2D5A3D; /* base forest green */
+  --color-primary-600: #244A32; /* dark forest green */
+  --color-primary-700: #1B3A27; /* darker forest green */
+  --color-primary-800: #122A1C; /* very dark forest green */
+  --color-primary-900: #091A11; /* darkest forest green */
+
+  /* Secondary Colors */
+  --color-secondary: #4A7C59; /* balanced mid-tone green */
+  --color-secondary-50: #F2F6F3; /* lightest mid-tone green */
+  --color-secondary-100: #D8E5DB; /* very light mid-tone green */
+  --color-secondary-200: #B1CBB7; /* light mid-tone green */
+  --color-secondary-300: #8AB193; /* medium-light mid-tone green */
+  --color-secondary-400: #63976F; /* medium mid-tone green */
+  --color-secondary-500: #4A7C59; /* base mid-tone green */
+  --color-secondary-600: #3E674A; /* dark mid-tone green */
+  --color-secondary-700: #2F4E38; /* darker mid-tone green */
+  --color-secondary-800: #1F3425; /* very dark mid-tone green */
+  --color-secondary-900: #101A13; /* darkest mid-tone green */
+
+  /* Accent Colors */
+  --color-accent: #7FB069; /* fresh growth green */
+  --color-accent-50: #F5F9F3; /* lightest growth green */
+  --color-accent-100: #E3EFE0; /* very light growth green */
+  --color-accent-200: #C7DFC1; /* light growth green */
+  --color-accent-300: #ABCFA2; /* medium-light growth green */
+  --color-accent-400: #8FBF83; /* medium growth green */
+  --color-accent-500: #7FB069; /* base growth green */
+  --color-accent-600: #6B9457; /* dark growth green */
+  --color-accent-700: #516F42; /* darker growth green */
+  --color-accent-800: #374A2D; /* very dark growth green */
+  --color-accent-900: #1D2518; /* darkest growth green */
+
+  /* Background Colors */
+  --color-background: #FAFBFA; /* warm off-white */
+  --color-surface: #F5F7F5; /* subtle green-tinted white */
+
+  /* Text Colors */
+  --color-text-primary: #1A1A1A; /* near-black */
+  --color-text-secondary: #4A5A4A; /* muted green-gray */
+
+  /* Status Colors */
+  --color-success: #6B8E5A; /* earthy green */
+  --color-success-50: #F4F7F2; /* lightest earthy green */
+  --color-success-100: #E1EAD9; /* very light earthy green */
+  --color-success-200: #C3D5B3; /* light earthy green */
+  --color-success-300: #A5C08D; /* medium-light earthy green */
+  --color-success-400: #87AB67; /* medium earthy green */
+  --color-success-500: #6B8E5A; /* base earthy green */
+  --color-success-600: #58764B; /* dark earthy green */
+  --color-success-700: #435E39; /* darker earthy green */
+  --color-success-800: #2E4627; /* very dark earthy green */
+  --color-success-900: #192E15; /* darkest earthy green */
+
+  --color-warning: #B8860B; /* natural amber */
+  --color-warning-50: #FDF9F0; /* lightest amber */
+  --color-warning-100: #F9EDCC; /* very light amber */
+  --color-warning-200: #F3DB99; /* light amber */
+  --color-warning-300: #EDC966; /* medium-light amber */
+  --color-warning-400: #E7B733; /* medium amber */
+  --color-warning-500: #B8860B; /* base amber */
+  --color-warning-600: #9A7009; /* dark amber */
+  --color-warning-700: #7C5A07; /* darker amber */
+  --color-warning-800: #5E4405; /* very dark amber */
+  --color-warning-900: #402E03; /* darkest amber */
+
+  --color-error: #A0522D; /* warm brown-red */
+  --color-error-50: #F8F3F0; /* lightest brown-red */
+  --color-error-100: #ECDDD4; /* very light brown-red */
+  --color-error-200: #D9BBA9; /* light brown-red */
+  --color-error-300: #C6997E; /* medium-light brown-red */
+  --color-error-400: #B37753; /* medium brown-red */
+  --color-error-500: #A0522D; /* base brown-red */
+  --color-error-600: #864526; /* dark brown-red */
+  --color-error-700: #6C381E; /* darker brown-red */
+  --color-error-800: #522B17; /* very dark brown-red */
+  --color-error-900: #381E0F; /* darkest brown-red */
+
+  /* Border Colors */
+  --color-border: #E5EDE5; /* muted green border */
+  --color-border-light: #F0F4F1; /* light muted green border */
+}
+
+@layer base {
+  html {
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-caption {
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .shadow-organic {
+    box-shadow: 0 2px 8px rgba(45, 90, 61, 0.08), 0 1px 3px rgba(45, 90, 61, 0.06);
+  }
+  
+  .shadow-organic-lg {
+    box-shadow: 0 4px 16px rgba(45, 90, 61, 0.12), 0 2px 6px rgba(45, 90, 61, 0.08);
+  }
+  
+  .shadow-organic-xl {
+    box-shadow: 0 8px 32px rgba(45, 90, 61, 0.16), 0 4px 12px rgba(45, 90, 61, 0.12);
+  }
+}
+
+@layer utilities {
+  .animation-gentle {
+    transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  
+  .duration-micro {
+    transition-duration: 200ms;
+  }
+  
+  .duration-interaction {
+    transition-duration: 300ms;
+  }
+  
+  .duration-page {
+    transition-duration: 400ms;
+  }
+  
+  .duration-transition {
+    transition-duration: 600ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

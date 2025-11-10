@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartilha Digital Interativa - EcoSustain Interactive</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <meta name="description" content="Cartilha digital interativa sobre sustentabilidade com animações realistas de virar páginas e conteúdo educativo completo">
+    <style>
+        .book-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        .book {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+        }
+        
+        .page {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background: white;
+            border: 1px solid #E5EDE5;
+            border-radius: 0 8px 8px 0;
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.12);
+            overflow: hidden;
+        }
+        
+        .page-left {
+            left: 0;
+            border-radius: 8px 0 0 8px;
+            transform-origin: right center;
+        }
+        
+        .page-right {
+            right: 0;
+        }
+        
+        .page.flipping {
+            transform: rotateY(-180deg);
+            z-index: 10;
+        }
+        
+        .page-content {
+            padding: 2rem;
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-number {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 0.875rem;
+            color: #4A5A4A;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .chapter-marker {
+            position: absolute;
+            top: 0;
+            right: -1px;
+            width: 4px;
+            height: 60px;
+            background: #7FB069;
+            border-radius: 4px 0 0 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .book {
+                height: 500px;
+            }
+            
+            .page {
+                width: 100%;
+                position: relative;
+                margin-bottom: 1rem;
+                transform: none !important;
+                border-radius: 8px;
+            }
+            
+            .page-left {
+                border-radius: 8px;
+            }
+            
+            .mobile-page-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        .bookmark-ribbon {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            width: 30px;
+            height: 80px;
+            background: #7FB069;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 70%, 0 85%);
+            z-index: 20;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .bookmark-ribbon:hover {
+            background: #6B9457;
+            transform: translateY(5px);
+        }
+        
+        .progress-indicator {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: #E5EDE5;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #7FB069, #2D5A3D);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+    </style>
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fecosustain3973back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.9"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.1"></script>
+  </head>
+<body class="bg-background min-h-screen">
+    <!-- Navigation Header -->
+    <header class="bg-white shadow-organic sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <svg class="h-10 w-10 text-primary" viewBox="0 0 40 40" fill="currentColor">
+                        <path d="M20 2C15.5 2 12 5.5 12 10c0 2.5 1 4.8 2.6 6.5L20 22l5.4-5.5C27 14.8 28 12.5 28 10c0-4.5-3.5-8-8-8zm0 11c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+                        <path d="M8 24c-2.2 0-4 1.8-4 4v8c0 2.2 1.8 4 4 4h24c2.2 0 4-1.8 4-4v-8c0-2.2-1.8-4-4-4H8zm16 10H16v-2h8v2zm8-4H8v-2h24v2z"/>
+                        <circle cx="20" cy="32" r="2" fill="currentColor"/>
+                    </svg>
+                    <span class="ml-3 text-xl font-heading font-bold text-primary">EcoSustain</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="homepage.html" class="text-text-secondary hover:text-primary transition-colors duration-interaction">Início</a>
+                    <a href="interactive_digital_cartilha.html" class="text-primary font-medium border-b-2 border-primary pb-1">Cartilha Digital</a>
+                    <a href="games_section_landing.html" class="text-text-secondary hover:text-primary transition-colors duration-interaction">Jogos</a>
+                    <a href="environmental_topics_hub.html" class="text-text-secondary hover:text-primary transition-colors duration-interaction">Tópicos</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 rounded-organic text-text-secondary hover:text-primary hover:bg-primary-50 transition-colors duration-interaction" id="mobile-menu-btn">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div class="md:hidden hidden" id="mobile-menu">
+                <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-border">
+                    <a href="homepage.html" class="block px-3 py-2 text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction">Início</a>
+                    <a href="interactive_digital_cartilha.html" class="block px-3 py-2 text-primary font-medium bg-primary-50 rounded-organic">Cartilha Digital</a>
+                    <a href="games_section_landing.html" class="block px-3 py-2 text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction">Jogos</a>
+                    <a href="environmental_topics_hub.html" class="block px-3 py-2 text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction">Tópicos</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Floating Navigation Panel -->
+    <div class="fixed left-4 top-1/2 transform -translate-y-1/2 z-40 hidden lg:block">
+        <div class="bg-white rounded-organic-lg shadow-organic-lg p-4 w-64">
+            <h3 class="font-heading font-semibold text-primary mb-4 text-sm">Navegação Rápida</h3>
+            <div class="space-y-2">
+                <button class="chapter-nav-btn w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction" data-page="0">
+                    <span class="flex items-center">
+                        <span class="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                        Introdução à Sustentabilidade
+                    </span>
+                </button>
+                <button class="chapter-nav-btn w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction" data-page="2">
+                    <span class="flex items-center">
+                        <span class="w-2 h-2 bg-accent rounded-full mr-3"></span>
+                        Mudanças Climáticas
+                    </span>
+                </button>
+                <button class="chapter-nav-btn w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction" data-page="4">
+                    <span class="flex items-center">
+                        <span class="w-2 h-2 bg-secondary rounded-full mr-3"></span>
+                        Energia Renovável
+                    </span>
+                </button>
+                <button class="chapter-nav-btn w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction" data-page="6">
+                    <span class="flex items-center">
+                        <span class="w-2 h-2 bg-success rounded-full mr-3"></span>
+                        Práticas Sustentáveis
+                    </span>
+                </button>
+                <button class="chapter-nav-btn w-full text-left px-3 py-2 text-sm text-text-secondary hover:text-primary hover:bg-primary-50 rounded-organic transition-colors duration-interaction" data-page="8">
+                    <span class="flex items-center">
+                        <span class="w-2 h-2 bg-warning rounded-full mr-3"></span>
+                        Biodiversidade
+                    </span>
+                </button>
+            </div>
+            
+            <!-- Bookmark Section -->
+            <div class="mt-6 pt-4 border-t border-border">
+                <h4 class="font-heading font-medium text-primary mb-2 text-sm">Marcadores</h4>
+                <div id="bookmarks-list" class="space-y-1 text-xs text-text-secondary">
+                    <p class="italic">Nenhum marcador salvo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header Section -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl sm:text-4xl font-heading font-bold text-primary mb-4">
+                    Cartilha Digital Interativa
+                </h1>
+                <p class="text-lg text-text-secondary max-w-3xl mx-auto mb-6">
+                    Explore nossa cartilha digital com animações realistas de virar páginas e conteúdo completo sobre sustentabilidade e meio ambiente.
+                </p>
+                
+                <!-- Reading Controls -->
+                <div class="flex items-center justify-center gap-4 mb-8">
+                    <button id="prev-page" class="flex items-center px-4 py-2 bg-primary text-white rounded-organic hover:bg-primary-600 transition-colors duration-interaction disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        Anterior
+                    </button>
+                    
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-text-secondary">Página</span>
+                        <span id="current-page" class="font-heading font-semibold text-primary">1</span>
+                        <span class="text-sm text-text-secondary">de</span>
+                        <span id="total-pages" class="font-heading font-semibold text-primary">10</span>
+                    </div>
+                    
+                    <button id="next-page" class="flex items-center px-4 py-2 bg-primary text-white rounded-organic hover:bg-primary-600 transition-colors duration-interaction">
+                        Próxima
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Digital Book Container -->
+            <div class="book-container relative">
+                <div class="book" id="digital-book">
+                    <!-- Bookmark Ribbon -->
+                    <div class="bookmark-ribbon" id="bookmark-btn" title="Adicionar marcador"></div>
+                    
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator">
+                        <div class="progress-bar" id="progress-bar" style="width: 10%"></div>
+                    </div>
+
+                    <!-- Desktop View - Pages Side by Side -->
+                    <div class="hidden md:block">
+                        <!-- Page 1 (Left) -->
+                        <div class="page page-left" id="page-left">
+                            <div class="page-content">
+                                <div class="chapter-marker"></div>
+                                <h2 class="text-2xl font-heading font-bold text-primary mb-6">Introdução à Sustentabilidade</h2>
+                                <div class="mb-6">
+                                    <img src="https://images.unsplash.com/photo-1705630934280-ad4e92a9d189" 
+                                         alt="Floresta verde exuberante representando a natureza e sustentabilidade" 
+                                         class="w-full h-48 object-cover rounded-organic mb-4"
+                                         loading="lazy"
+                                         onerror="this.src='https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&w=400'; this.onerror=null;">
+                                </div>
+                                <p class="text-text-secondary leading-relaxed mb-4">
+                                    A sustentabilidade é um conceito fundamental que busca equilibrar as necessidades humanas com a preservação do meio ambiente para as futuras gerações.
+                                </p>
+                                <p class="text-text-secondary leading-relaxed mb-4">
+                                    Este conceito abrange três pilares principais: ambiental, social e econômico, trabalhando em harmonia para criar um futuro mais equilibrado e próspero.
+                                </p>
+                                <div class="bg-primary-50 p-4 rounded-organic">
+                                    <h3 class="font-heading font-semibold text-primary mb-2">Você Sabia?</h3>
+                                    <p class="text-sm text-text-secondary">
+                                        O termo "desenvolvimento sustentável" foi popularizado em 1987 pelo Relatório Brundtland da ONU.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page-number">1</div>
+                        </div>
+
+                        <!-- Page 2 (Right) -->
+                        <div class="page page-right" id="page-right">
+                            <div class="page-content">
+                                <h3 class="text-xl font-heading font-semibold text-primary mb-4">Os Três Pilares da Sustentabilidade</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-accent-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                            <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-heading font-medium text-primary mb-1">Pilar Ambiental</h4>
+                                            <p class="text-sm text-text-secondary">Preservação dos recursos naturais e proteção dos ecossistemas.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-secondary-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                            <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-heading font-medium text-primary mb-1">Pilar Social</h4>
+                                            <p class="text-sm text-text-secondary">Equidade social, qualidade de vida e bem-estar das comunidades.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-8 h-8 bg-warning-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                            <svg class="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-heading font-medium text-primary mb-1">Pilar Econômico</h4>
+                                            <p class="text-sm text-text-secondary">Desenvolvimento econômico viável e responsável a longo prazo.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6">
+                                    <img src="https://images.unsplash.com/photo-1576595580224-ac656e142d05" 
+                                         alt="Diagrama ilustrando os três pilares da sustentabilidade interconectados" 
+                                         class="w-full h-32 object-cover rounded-organic"
+                                         loading="lazy"
+                                         onerror="this.src='https://images.pexels.com/photos/1108572/pexels-photo-1108572.jpeg?auto=compress&cs=tinysrgb&w=400'; this.onerror=null;">
+                                </div>
+                            </div>
+                            <div class="page-number">2</div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile View - Single Page -->
+                    <div class="md:hidden mobile-page-container">
+                        <div class="page bg-white rounded-organic-lg shadow-organic-lg">
+                            <div class="page-content">
+                                <div class="chapter-marker"></div>
+                                <h2 class="text-xl font-heading font-bold text-primary mb-4">Introdução à Sustentabilidade</h2>
+                                <div class="mb-4">
+                                    <img src="https://images.unsplash.com/photo-1705630934280-ad4e92a9d189" 
+                                         alt="Floresta verde exuberante representando a natureza e sustentabilidade" 
+                                         class="w-full h-40 object-cover rounded-organic mb-3"
+                                         loading="lazy"
+                                         onerror="this.src='https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&w=400'; this.onerror=null;">
+                                </div>
+                                <p class="text-text-secondary leading-relaxed mb-3 text-sm">
+                                    A sustentabilidade é um conceito fundamental que busca equilibrar as necessidades humanas com a preservação do meio ambiente para as futuras gerações.
+                                </p>
+                                <div class="bg-primary-50 p-3 rounded-organic">
+                                    <h3 class="font-heading font-medium text-primary mb-1 text-sm">Você Sabia?</h3>
+                                    <p class="text-xs text-text-secondary">
+                                        O termo "desenvolvimento sustentável" foi popularizado em 1987 pelo Relatório Brundtland da ONU.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="page-number">1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Elements -->
+            <div class="mt-12 text-center">
+                <div class="bg-white rounded-organic-lg shadow-organic p-6 max-w-2xl mx-auto">
+                    <h3 class="text-xl font-heading font-semibold text-primary mb-4">Recursos Interativos</h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <button class="flex items-center justify-center gap-2 px-4 py-3 bg-accent-50 text-accent rounded-organic hover:bg-accent-100 transition-colors duration-interaction">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"/>
+                            </svg>
+                            <span class="font-medium">Glossário</span>
+                        </button>
+                        <a href="games_section_landing.html" class="flex items-center justify-center gap-2 px-4 py-3 bg-secondary-50 text-secondary rounded-organic hover:bg-secondary-100 transition-colors duration-interaction">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.5a2.5 2.5 0 000-5H9v5zm0 0H7.5a2.5 2.5 0 000 5H9v-5z"/>
+                            </svg>
+                            <span class="font-medium">Jogos Educativos</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation to Other Sections -->
+            <div class="mt-12">
+                <div class="bg-gradient-to-br from-primary-50 to-accent-50 rounded-organic-lg p-8">
+                    <h3 class="text-2xl font-heading font-bold text-primary mb-6 text-center">Continue Explorando</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <a href="games_section_landing.html" class="group bg-white rounded-organic-lg p-6 hover:shadow-organic-lg transition-all duration-interaction transform hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-accent-100 rounded-organic flex items-center justify-center mb-4 group-hover:bg-accent-200 transition-colors duration-interaction">
+                                <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.5a2.5 2.5 0 000-5H9v5zm0 0H7.5a2.5 2.5 0 000 5H9v-5z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-heading font-semibold text-primary mb-2">Jogos Educativos</h4>
+                            <p class="text-text-secondary text-sm">Aprenda brincando com nossos jogos interativos sobre sustentabilidade.</p>
+                        </a>
+                        
+                        <a href="environmental_topics_hub.html" class="group bg-white rounded-organic-lg p-6 hover:shadow-organic-lg transition-all duration-interaction transform hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-secondary-100 rounded-organic flex items-center justify-center mb-4 group-hover:bg-secondary-200 transition-colors duration-interaction">
+                                <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-heading font-semibold text-primary mb-2">Tópicos Ambientais</h4>
+                            <p class="text-text-secondary text-sm">Explore conteúdo detalhado sobre diversos temas ambientais.</p>
+                        </a>
+                        
+                        <a href="homepage.html" class="group bg-white rounded-organic-lg p-6 hover:shadow-organic-lg transition-all duration-interaction transform hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-primary-100 rounded-organic flex items-center justify-center mb-4 group-hover:bg-primary-200 transition-colors duration-interaction">
+                                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-heading font-semibold text-primary mb-2">Página Inicial</h4>
+                            <p class="text-text-secondary text-sm">Volte à página principal para explorar todos os recursos.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary-800 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Logo and Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <svg class="h-8 w-8 text-accent" viewBox="0 0 40 40" fill="currentColor">
+                            <path d="M20 2C15.5 2 12 5.5 12 10c0 2.5 1 4.8 2.6 6.5L20 22l5.4-5.5C27 14.8 28 12.5 28 10c0-4.5-3.5-8-8-8zm0 11c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+                            <path d="M8 24c-2.2 0-4 1.8-4 4v8c0 2.2 1.8 4 4 4h24c2.2 0 4-1.8 4-4v-8c0-2.2-1.8-4-4-4H8zm16 10H16v-2h8v2zm8-4H8v-2h24v2z"/>
+                            <circle cx="20" cy="32" r="2" fill="currentColor"/>
+                        </svg>
+                        <span class="ml-3 text-xl font-heading font-bold">EcoSustain Interactive</span>
+                    </div>
+                    <p class="text-primary-200 leading-relaxed">
+                        Plataforma educacional dedicada ao ensino de sustentabilidade através de experiências interativas e conteúdo de qualidade.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="font-heading font-semibold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="homepage.html" class="text-primary-200 hover:text-white transition-colors duration-interaction">Início</a></li>
+                        <li><a href="interactive_digital_cartilha.html" class="text-primary-200 hover:text-white transition-colors duration-interaction">Cartilha Digital</a></li>
+                        <li><a href="games_section_landing.html" class="text-primary-200 hover:text-white transition-colors duration-interaction">Jogos</a></li>
+                        <li><a href="environmental_topics_hub.html" class="text-primary-200 hover:text-white transition-colors duration-interaction">Tópicos</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="font-heading font-semibold mb-4">Contato</h3>
+                    <ul class="space-y-2 text-primary-200">
+                        <li>contato@ecosustain.com.br</li>
+                        <li>+55 (11) 9999-9999</li>
+                        <li>São Paulo, SP - Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-primary-700 mt-8 pt-8 text-center text-primary-200">
+                <p>&copy; 2025 IFPR Interactive. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Interactive Functionality -->
+    <script>
+        // Page data structure
+        const pages = [
+            {
+                left: {
+                    title: "Introdução à Sustentabilidade",
+                    content: `
+                        <div class="chapter-marker"></div>
+                        <h2 class="text-2xl font-heading font-bold text-primary mb-6">Introdução à Sustentabilidade</h2>
+                        <div class="mb-6">
+                            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Floresta verde exuberante representando a natureza e sustentabilidade" 
+                                 class="w-full h-48 object-cover rounded-organic mb-4"
+                                 loading="lazy"
+                                 onerror="this.src='https://images.pexels.com/photos/1072179/pexels-photo-1072179.jpeg?auto=compress&cs=tinysrgb&w=400'; this.onerror=null;">
+                        </div>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            A sustentabilidade é um conceito fundamental que busca equilibrar as necessidades humanas com a preservação do meio ambiente para as futuras gerações.
+                        </p>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            Este conceito abrange três pilares principais: ambiental, social e econômico, trabalhando em harmonia para criar um futuro mais equilibrado e próspero.
+                        </p>
+                        <div class="bg-primary-50 p-4 rounded-organic">
+                            <h3 class="font-heading font-semibold text-primary mb-2">Você Sabia?</h3>
+                            <p class="text-sm text-text-secondary">
+                                O termo "desenvolvimento sustentável" foi popularizado em 1987 pelo Relatório Brundtland da ONU.
+                            </p>
+                        </div>
+                    `,
+                    pageNumber: 1
+                },
+                right: {
+                    title: "Os Três Pilares da Sustentabilidade",
+                    content: `
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-4">Os Três Pilares da Sustentabilidade</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-accent-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Pilar Ambiental</h4>
+                                    <p class="text-sm text-text-secondary">Preservação dos recursos naturais e proteção dos ecossistemas.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-secondary-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Pilar Social</h4>
+                                    <p class="text-sm text-text-secondary">Equidade social, qualidade de vida e bem-estar das comunidades.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-warning-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Pilar Econômico</h4>
+                                    <p class="text-sm text-text-secondary">Desenvolvimento econômico viável e responsável a longo prazo.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <img src="https://images.unsplash.com/photo-1569163139394-de4e4f43e4e5?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Diagrama ilustrando os três pilares da sustentabilidade interconectados" 
+                                 class="w-full h-32 object-cover rounded-organic"
+                                 loading="lazy"
+                                 onerror="this.src='https://images.pexels.com/photos/1108572/pexels-photo-1108572.jpeg?auto=compress&cs=tinysrgb&w=400'; this.onerror=null;">
+                        </div>
+                    `,
+                    pageNumber: 2
+                }
+            },
+            {
+                left: {
+                    title: "Mudanças Climáticas",
+                    content: `
+                        <div class="chapter-marker" style="background: #A0522D;"></div>
+                        <h2 class="text-2xl font-heading font-bold text-primary mb-6">Mudanças Climáticas</h2>
+                        <div class="mb-6">
+                            <img src="https://images.unsplash.com/photo-1569163139394-de4e4f43e4e5?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Gráfico mostrando o aumento da temperatura global ao longo dos anos" 
+                                 class="w-full h-48 object-cover rounded-organic mb-4"
+                                 loading="lazy"
+                                 onerror="this.src='https://images.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_1280.jpg'; this.onerror=null;">
+                        </div>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            As mudanças climáticas representam um dos maiores desafios da humanidade no século XXI, causadas principalmente pela emissão de gases de efeito estufa.
+                        </p>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            O aquecimento global tem consequências diretas nos padrões climáticos, elevação do nível do mar e biodiversidade.
+                        </p>
+                        <div class="bg-error-50 p-4 rounded-organic">
+                            <h3 class="font-heading font-semibold text-error mb-2">Alerta Importante</h3>
+                            <p class="text-sm text-text-secondary">
+                                A temperatura média global já aumentou 1,1°C desde a era pré-industrial.
+                            </p>
+                        </div>
+                    `,
+                    pageNumber: 3
+                },
+                right: {
+                    title: "Causas e Consequências",
+                    content: `
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-4">Principais Causas</h3>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-error rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Queima de combustíveis fósseis</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-error rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Desmatamento e degradação florestal</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-error rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Agricultura intensiva</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-error rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Processos industriais</span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-4">Consequências</h3>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Eventos climáticos extremos</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Perda de biodiversidade</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Impactos na agricultura</span>
+                            </div>
+                        </div>
+                    `,
+                    pageNumber: 4
+                }
+            },
+            {
+                left: {
+                    title: "Energia Renovável",
+                    content: `
+                        <div class="chapter-marker" style="background: #B8860B;"></div>
+                        <h2 class="text-2xl font-heading font-bold text-primary mb-6">Energia Renovável</h2>
+                        <div class="mb-6">
+                            <img src="https://images.pexels.com/photos/433308/pexels-photo-433308.jpeg?auto=compress&cs=tinysrgb&w=400" 
+                                 alt="Painéis solares e turbinas eólicas em um campo verde representando energia renovável" 
+                                 class="w-full h-48 object-cover rounded-organic mb-4"
+                                 loading="lazy"
+                                 onerror="this.src='https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=400&auto=format&fit=crop'; this.onerror=null;">
+                        </div>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            As energias renováveis são fontes de energia que se regeneram naturalmente e são consideradas inesgotáveis na escala de tempo humana.
+                        </p>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            Representam a solução mais viável para reduzir as emissões de gases de efeito estufa e combater as mudanças climáticas.
+                        </p>
+                        <div class="bg-warning-50 p-4 rounded-organic">
+                            <h3 class="font-heading font-semibold text-warning mb-2">Crescimento Acelerado</h3>
+                            <p class="text-sm text-text-secondary">
+                                A capacidade global de energia renovável cresceu 260% na última década.
+                            </p>
+                        </div>
+                    `,
+                    pageNumber: 5
+                },
+                right: {
+                    title: "Tipos de Energia Renovável",
+                    content: `
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-4">Principais Fontes</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-warning-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Energia Solar</h4>
+                                    <p class="text-sm text-text-secondary">Captação da radiação solar através de painéis fotovoltaicos.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-accent-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Energia Eólica</h4>
+                                    <p class="text-sm text-text-secondary">Aproveitamento da força dos ventos através de turbinas.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-secondary-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Energia Hidrelétrica</h4>
+                                    <p class="text-sm text-text-secondary">Geração através do movimento da água em rios e quedas d'água.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    pageNumber: 6
+                }
+            },
+            {
+                left: {
+                    title: "Práticas Sustentáveis",
+                    content: `
+                        <div class="chapter-marker" style="background: #6B8E5A;"></div>
+                        <h2 class="text-2xl font-heading font-bold text-primary mb-6">Práticas Sustentáveis</h2>
+                        <div class="mb-6">
+                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                                 alt="Pessoa separando materiais recicláveis em diferentes recipientes coloridos" 
+                                 class="w-full h-48 object-cover rounded-organic mb-4"
+                                 loading="lazy"
+                                 onerror="this.src='https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=400'; this.onerror=null;">
+                        </div>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            Práticas sustentáveis são ações do dia a dia que contribuem para a preservação do meio ambiente e o uso consciente dos recursos naturais.
+                        </p>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            Pequenas mudanças nos hábitos cotidianos podem gerar grandes impactos positivos para o planeta.
+                        </p>
+                        <div class="bg-success-50 p-4 rounded-organic">
+                            <h3 class="font-heading font-semibold text-success mb-2">Impacto Coletivo</h3>
+                            <p class="text-sm text-text-secondary">
+                                Se cada pessoa adotar 3 práticas sustentáveis, podemos reduzir 40% das emissões domésticas.
+                            </p>
+                        </div>
+                    `,
+                    pageNumber: 7
+                },
+                right: {
+                    title: "Ações Práticas",
+                    content: `
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-4">No Dia a Dia</h3>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 bg-success-100 rounded-organic flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-text-secondary">Separar corretamente o lixo para reciclagem</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 bg-success-100 rounded-organic flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-text-secondary">Economizar água e energia elétrica</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 bg-success-100 rounded-organic flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-text-secondary">Usar transporte público ou bicicleta</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 bg-success-100 rounded-organic flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-text-secondary">Consumir produtos locais e orgânicos</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 bg-success-100 rounded-organic flex items-center justify-center">
+                                    <svg class="w-3 h-3 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <span class="text-sm text-text-secondary">Reduzir o uso de plásticos descartáveis</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-primary-50 p-3 rounded-organic">
+                            <h4 class="font-heading font-medium text-primary mb-2 text-sm">Dica Especial</h4>
+                            <p class="text-xs text-text-secondary">
+                                Comece com uma prática por semana até criar o hábito, depois adicione outras gradualmente.
+                            </p>
+                        </div>
+                    `,
+                    pageNumber: 8
+                }
+            },
+            {
+                left: {
+                    title: "Biodiversidade",
+                    content: `
+                        <div class="chapter-marker" style="background: #7FB069;"></div>
+                        <h2 class="text-2xl font-heading font-bold text-primary mb-6">Biodiversidade</h2>
+                        <div class="mb-6">
+                            <img src="https://images.pixabay.com/photo/2017/05/09/03/46/alberta-2297204_1280.jpg?auto=compress&cs=tinysrgb&w=400" 
+                                 alt="Ecossistema diversificado com várias espécies de plantas e animais em harmonia" 
+                                 class="w-full h-48 object-cover rounded-organic mb-4"
+                                 loading="lazy"
+                                 onerror="this.src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop'; this.onerror=null;">
+                        </div>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            A biodiversidade refere-se à variedade de vida na Terra, incluindo a diversidade de espécies, genes e ecossistemas.
+                        </p>
+                        <p class="text-text-secondary leading-relaxed mb-4">
+                            É fundamental para o equilíbrio dos ecossistemas e para a sobrevivência humana, fornecendo serviços essenciais como polinização e purificação do ar.
+                        </p>
+                        <div class="bg-accent-50 p-4 rounded-organic">
+                            <h3 class="font-heading font-semibold text-accent mb-2">Riqueza Natural</h3>
+                            <p class="text-sm text-text-secondary">
+                                O Brasil abriga cerca de 20% de toda a biodiversidade mundial.
+                            </p>
+                        </div>
+                    `,
+                    pageNumber: 9
+                },
+                right: {
+                    title: "Importância e Conservação",
+                    content: `
+                        <h3 class="text-xl font-heading font-semibold text-primary mb-4">Por que Preservar?</h3>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-accent-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Serviços Ecossistêmicos</h4>
+                                    <p class="text-sm text-text-secondary">Polinização, purificação da água e regulação climática.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 bg-secondary-100 rounded-organic flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 7.172V5L8 4z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-heading font-medium text-primary mb-1">Recursos Medicinais</h4>
+                                    <p class="text-sm text-text-secondary">Muitos medicamentos são derivados de plantas e organismos.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="font-heading font-medium text-primary mb-3">Como Contribuir</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-accent rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Apoiar áreas de conservação</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-accent rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Consumo consciente</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-accent rounded-full"></div>
+                                <span class="text-sm text-text-secondary">Educação ambiental</span>
+                            </div>
+                        </div>
+                    `,
+                    pageNumber: 10
+                }
+            }
+        ];
+
+        let currentPageIndex = 0;
+        let bookmarks = [];
+
+        // DOM elements
+        const pageLeft = document.getElementById('page-left');
+        const pageRight = document.getElementById('page-right');
+        const currentPageSpan = document.getElementById('current-page');
+        const totalPagesSpan = document.getElementById('total-pages');
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+        const progressBar = document.getElementById('progress-bar');
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Initialize
+        function init() {
+            totalPagesSpan.textContent = pages.length * 2;
+            updatePages();
+            updateProgress();
+            updateButtons();
+            
+            // Event listeners
+            prevBtn.addEventListener('click', previousPage);
+            nextBtn.addEventListener('click', nextPage);
+            bookmarkBtn.addEventListener('click', toggleBookmark);
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            
+            // Chapter navigation
+            document.querySelectorAll('.chapter-nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const pageIndex = parseInt(e.currentTarget.dataset.page);
+                    goToPage(pageIndex);
+                });
+            });
+
+            // Touch/swipe support for mobile
+            let startX = 0;
+            let startY = 0;
+            
+            document.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            });
+            
+            document.addEventListener('touchend', (e) => {
+                if (!startX || !startY) return;
+                
+                const endX = e.changedTouches[0].clientX;
+                const endY = e.changedTouches[0].clientY;
+                
+                const diffX = startX - endX;
+                const diffY = startY - endY;
+                
+                // Only trigger if horizontal swipe is more significant than vertical
+                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        nextPage(); // Swipe left = next page
+                    } else {
+                        previousPage(); // Swipe right = previous page
+                    }
+                }
+                
+                startX = 0;
+                startY = 0;
+            });
+        }
+
+        function updatePages() {
+            if (currentPageIndex < pages.length) {
+                const currentPages = pages[currentPageIndex];
+                
+                // Update left page
+                if (pageLeft) {
+                    pageLeft.querySelector('.page-content').innerHTML = currentPages.left.content;
+                    pageLeft.querySelector('.page-number').textContent = currentPages.left.pageNumber;
+                }
+                
+                // Update right page
+                if (pageRight) {
+                    pageRight.querySelector('.page-content').innerHTML = currentPages.right.content;
+                    pageRight.querySelector('.page-number').textContent = currentPages.right.pageNumber;
+                }
+                
+                currentPageSpan.textContent = currentPages.left.pageNumber;
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentPageIndex + 1) / pages.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = currentPageIndex === 0;
+            nextBtn.disabled = currentPageIndex === pages.length - 1;
+        }
+
+        function nextPage() {
+            if (currentPageIndex < pages.length - 1) {
+                // Add page flip animation
+                if (pageRight) {
+                    pageRight.classList.add('flipping');
+                    setTimeout(() => {
+                        currentPageIndex++;
+                        updatePages();
+                        updateProgress();
+                        updateButtons();
+                        pageRight.classList.remove('flipping');
+                    }, 400);
+                } else {
+                    currentPageIndex++;
+                    updatePages();
+                    updateProgress();
+                    updateButtons();
+                }
+            }
+        }
+
+        function previousPage() {
+            if (currentPageIndex > 0) {
+                // Add page flip animation
+                if (pageLeft) {
+                    pageLeft.classList.add('flipping');
+                    setTimeout(() => {
+                        currentPageIndex--;
+                        updatePages();
+                        updateProgress();
+                        updateButtons();
+                        pageLeft.classList.remove('flipping');
+                    }, 400);
+                } else {
+                    currentPageIndex--;
+                    updatePages();
+                    updateProgress();
+                    updateButtons();
+                }
+            }
+        }
+
+        function goToPage(pageIndex) {
+            if (pageIndex >= 0 && pageIndex < pages.length) {
+                currentPageIndex = pageIndex;
+                updatePages();
+                updateProgress();
+                updateButtons();
+            }
+        }
+
+        function toggleBookmark() {
+            const currentPage = currentPageIndex;
+            const bookmarkIndex = bookmarks.indexOf(currentPage);
+            
+            if (bookmarkIndex === -1) {
+                bookmarks.push(currentPage);
+                bookmarkBtn.style.background = '#6B9457';
+            } else {
+                bookmarks.splice(bookmarkIndex, 1);
+                bookmarkBtn.style.background = '#7FB069';
+            }
+            
+            updateBookmarksList();
+        }
+
+        function updateBookmarksList() {
+            const bookmarksList = document.getElementById('bookmarks-list');
+            
+            if (bookmarks.length === 0) {
+                bookmarksList.innerHTML = '<p class="italic">Nenhum marcador salvo</p>';
+            } else {
+                bookmarksList.innerHTML = bookmarks.map(pageIndex => {
+                    const page = pages[pageIndex];
+                    return `
+                        <button class="block w-full text-left px-2 py-1 text-xs text-text-secondary hover:text-primary hover:bg-primary-50 rounded transition-colors duration-interaction" onclick="goToPage(${pageIndex})">
+                            Página ${page.left.pageNumber} - ${page.left.title}
+                        </button>
+                    `;
+                }).join('');
+            }
+        }
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                previousPage();
+            } else if (e.key === 'ArrowRight') {
+                nextPage();
+            }
+        });
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
